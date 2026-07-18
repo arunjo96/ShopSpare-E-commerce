@@ -7,7 +7,7 @@ import {
   useUpdateOrderStatusMutation,
 } from "../../services/admin/adminOrderApi";
 
-import OrderDetailsDrawer from "../../components/OrderDetailsDrawer";
+import OrderDetailsDrawer from "../../components/order/OrderDetailsDrawer";
 
 const ORDER_STATUS = [
   "Pending",

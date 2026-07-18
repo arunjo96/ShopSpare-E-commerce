@@ -48,21 +48,28 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md rounded-3xl border border-gray-200 bg-white p-5 shadow-xl sm:p-8">
         {/* Header */}
 
-        <div className="text-center mb-8">
-          <div className="mx-auto w-14 h-14 rounded-full bg-black text-white flex items-center justify-center text-2xl mb-4">
+        <div className="mb-6 text-center sm:mb-8">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-black text-xl text-white sm:h-14 sm:w-14 sm:text-2xl">
             🔐
           </div>
 
-          <h1 className="text-3xl font-bold text-gray-800">Welcome Back</h1>
+          <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">
+            Welcome Back
+          </h1>
 
-          <p className="text-gray-500 mt-2">Login to continue shopping</p>
+          <p className="mt-2 text-sm text-gray-500 sm:text-base">
+            Login to continue shopping
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4 sm:space-y-5"
+        >
           {/* Email */}
 
           <div>
@@ -79,7 +86,7 @@ const Login = () => {
                 {...register("email", {
                   required: "Email is required",
                 })}
-                className="w-full rounded-xl border border-gray-300 py-3 pl-10 pr-3 text-gray-700 outline-none transition duration-200 focus:border-black focus:ring-2 focus:ring-black/10"
+                className="w-full rounded-xl border border-gray-300 py-3.5 pl-10 pr-3 text-[15px] text-gray-700 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               />
             </div>
 
@@ -111,7 +118,7 @@ const Login = () => {
                 {...register("password", {
                   required: "Password is required",
                 })}
-                className="w-full rounded-xl border border-gray-300 py-3 pl-10 pr-12 text-gray-700 outline-none transition duration-200 focus:border-black focus:ring-2 focus:ring-black/10"
+                className="w-full rounded-xl border border-gray-300 py-3.5 pl-10 pr-12 text-[15px] text-gray-700 outline-none transition focus:border-black focus:ring-2 focus:ring-black/10"
               />
 
               <button
@@ -132,7 +139,7 @@ const Login = () => {
 
           <button
             disabled={isLoading}
-            className="w-full bg-black text-white py-3 rounded-xl font-semibold transition duration-300 hover:bg-gray-800 active:scale-95 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full rounded-xl bg-black py-3.5 text-base font-semibold text-white transition hover:bg-gray-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? "Logging in..." : "Login"}
           </button>
@@ -140,7 +147,7 @@ const Login = () => {
 
         <Link
           to="/"
-          className="flex items-center gap-2 text-sm mt-4 justify-center font-medium text-gray-600 hover:text-black cursor-pointer"
+          className="mt-5 flex items-center justify-center gap-2 text-sm font-medium text-gray-600 transition hover:text-black"
         >
           <FiArrowLeft /> Home
         </Link>
@@ -151,7 +158,7 @@ const Login = () => {
           Don't have an account?
           <Link
             to="/register"
-            className="ml-1 font-semibold text-black hover:underline cursor-pointer"
+            className="mt-6 pl-1  pt-5 text-center text-sm text-black hover:underline font-medium "
           >
             Create Account
           </Link>

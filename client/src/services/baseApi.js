@@ -1,3 +1,5 @@
+
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { logout, setCredentials } from "../store/authSlice";
@@ -21,7 +23,18 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result.error && result.error.status === 401) {
+  
+  if (
+    result.error?.status === 401 &&
+    !args.url?.includes("/auth/refresh-token")
+  ) {
+    const accessToken = api.getState().auth.accessToken;
+
+    // User login pannala na refresh panna vendam
+    if (!accessToken) {
+      return result;
+    }
+
     const refreshResult = await baseQuery(
       {
         url: "/auth/refresh-token",
@@ -39,8 +52,10 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         }),
       );
 
+      // Original request retry
       result = await baseQuery(args, api, extraOptions);
     } else {
+      // Refresh fail aana logout
       api.dispatch(logout());
     }
   }

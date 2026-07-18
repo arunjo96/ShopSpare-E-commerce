@@ -10,7 +10,7 @@ export const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const { shippingAddress, paymentMethod } = req.body;
+    const { shippingAddress, paymentMethod, buyNowItems } = req.body;
 
     /* ---------------- Validation ---------------- */
 
@@ -30,30 +30,37 @@ export const createOrder = async (req, res) => {
 
     /* ---------------- Cart ---------------- */
 
-    const cart = await Cart.findOne({
-      user: userId,
-    }).populate("items.product");
+   let cartItems = [];
 
-    if (!cart || cart.items.length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Your cart is empty",
-      });
-    }
+   if (buyNowItems?.length) {
+     cartItems = buyNowItems;
+   } else {
+     const cart = await Cart.findOne({
+       user: userId,
+     }).populate("items.product");
 
+     if (!cart || cart.items.length === 0) {
+       return res.status(400).json({
+         success: false,
+         message: "Your cart is empty",
+       });
+     }
+
+     cartItems = cart.items;
+   }
     /* ---------------- Prepare Order ---------------- */
 
     const orderItems = [];
 
     let itemsPrice = 0;
 
-    for (const item of cart.items) {
-      const product = await Product.findById(item.product._id);
+    for (const item of cartItems) {
+const product = await Product.findById(item.product._id || item.product);
 
       if (!product || !product.isActive) {
         return res.status(404).json({
           success: false,
-          message: `${item.product.title} is unavailable`,
+          message: `${product.title} is unavailable`,
         });
       }
 
@@ -231,6 +238,8 @@ export const cancelOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
 
+    const { reason } = req.body;
+
     const order = await Order.findById(orderId);
 
     if (!order) {
@@ -257,8 +266,12 @@ export const cancelOrder = async (req, res) => {
       });
     }
 
-    order.orderStatus = "Cancelled";
-    order.cancelledAt = new Date();
+    // order.orderStatus = "Cancelled";
+    // order.cancelledAt = new Date();
+order.orderStatus = "Cancelled";
+order.cancelledAt = new Date();
+order.cancelReason = reason.trim();
+    
 
     /* ---------------- Restore Stock ---------------- */
 

@@ -1,0 +1,62 @@
+export const checkoutFields = [
+  {
+    name: "fullName",
+    component: "input",
+    type: "text",
+    placeholder: "Full Name",
+    required: "Full name is required",
+  },
+  {
+    name: "phone",
+    component: "input",
+    type: "text",
+    placeholder: "Phone Number",
+    required: "Phone number is required",
+    minLength: {
+      value: 10,
+      message: "Enter valid phone number",
+    },
+  },
+  {
+    name: "address",
+    component: "textarea",
+    rows: 4,
+    placeholder: "Street Address",
+      required: "Address is required",
+    colSpan: 2,
+  },
+  {
+    name: "landmark",
+    component: "input",
+    type: "text",
+    placeholder: "Landmark (Optional)",
+  },
+  {
+    name: "country",
+    component: "input",
+    type: "text",
+    placeholder: "Country",
+  },
+  {
+    name: "city",
+    component: "input",
+    type: "text",
+    placeholder: "City",
+    required: "City is required",
+  },
+  {
+    name: "state",
+    component: "input",
+    type: "text",
+    placeholder: "State",
+    required: "State is required",
+  },
+  {
+    name: "postalCode",
+    component: "input",
+    type: "text",
+    placeholder: "Postal Code",
+      required: "Postal code is required",
+    colSpan: 2,
+  },
+];

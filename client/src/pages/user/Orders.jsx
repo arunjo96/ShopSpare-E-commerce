@@ -1,138 +1,291 @@
+
+import { useState } from "react";
 import { toast } from "react-hot-toast";
+import {
+  FiPackage,
+  FiEye,
+  FiXCircle,
+  FiShoppingBag,
+} from "react-icons/fi";
 
 import {
   useGetMyOrdersQuery,
   useCancelOrderMutation,
 } from "../../services/order/orderApi";
 
+import OrderDetailsModal from "../../components/order/OrderDetailsModal";
+
+import CancelOrderModal from "../../components/order/CancelOrderModal";
+
 const Orders = () => {
   const { data, isLoading, isError } = useGetMyOrdersQuery();
 
   const [cancelOrder] = useCancelOrderMutation();
 
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
   const orders = data?.orders || [];
 
-  const handleCancel = async (orderId) => {
-    try {
-      await cancelOrder(orderId).unwrap();
 
-      toast.success("Order cancelled successfully");
-    } catch (error) {
-      toast.error(error?.data?.message || "Unable to cancel order");
-    }
-  };
+  const [cancelOrderOpen, setCancelOrderOpen] = useState(false);
+
+  const [orderToCancel, setOrderToCancel] = useState(null);
+
+  const [cancelLoading, setCancelLoading] = useState(false);
+
+
+
+const handleCancel = async (orderId, reason) => {
+  try {
+    setCancelLoading(true);
+
+    await cancelOrder({
+      orderId,
+      reason,
+    }).unwrap();
+
+    toast.success("Order cancelled successfully");
+
+    setCancelOrderOpen(false);
+    setOrderToCancel(null);
+  } catch (error) {
+    toast.error(error?.data?.message || "Unable to cancel order");
+  } finally {
+    setCancelLoading(false);
+  }
+};
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-lg font-medium">Loading orders...</p>
+      <div className="flex min-h-[70vh] items-center justify-center">
+        <p className="animate-pulse text-lg font-medium text-gray-500">
+          Loading Orders...
+        </p>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p>Failed to load orders</p>
+      <div className="flex min-h-[70vh] items-center justify-center">
+        <p className="text-red-500">Failed to load orders.</p>
       </div>
     );
   }
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-10">
-      <h1 className="mb-8 text-3xl font-bold">My Orders</h1>
+    <>
+      <section className="min-h-screen bg-gray-50 px-4 py-10">
+        <div className="mx-auto max-w-9/10 md:p-15 p-8 bg-white pt-10 border border-gray-300 rounded-2xl">
+          {/* Header */}
 
-      {orders.length === 0 ? (
-        <div className="rounded border bg-white p-8 text-center shadow-sm">
-          <p className="text-lg">No orders found</p>
-        </div>
-      ) : (
-        <div className="space-y-6">
-          {orders.map((order) => (
-            <div
-              key={order._id}
-              className="rounded-lg border bg-white p-6 shadow-sm"
-            >
-              {/* Header */}
+          <div className="mb-8 flex items-center gap-4">
+            <div className="rounded-2xl bg-black p-4 text-white">
+              <FiShoppingBag size={26} />
+            </div>
 
-              <div className="mb-5 flex flex-wrap justify-between gap-4 border-b pb-4">
-                <div>
-                  <p className="text-sm text-gray-500">Order ID</p>
+            <div>
+              <h1 className="text-3xl font-bold">My Orders</h1>
 
-                  <p className="font-medium">{order._id}</p>
-                </div>
+              <p className="text-gray-500">
+                {orders.length} Order{orders.length !== 1 && "s"}
+              </p>
+            </div>
+          </div>
 
-                <div>
-                  <p className="text-sm text-gray-500">Date</p>
+          {/* Empty */}
 
-                  <p>{new Date(order.createdAt).toLocaleDateString()}</p>
-                </div>
+          {orders.length === 0 ? (
+            <div className="rounded-3xl bg-white py-20 text-center shadow-sm">
+              <FiPackage size={60} className="mx-auto mb-5 text-gray-300" />
 
-                <div>
-                  <p className="text-sm text-gray-500">Total</p>
+              <h2 className="text-2xl font-bold">No Orders Yet</h2>
 
-                  <p className="font-bold">₹{order.totalPrice}</p>
-                </div>
-              </div>
+              <p className="mt-2 text-gray-500">
+                Your purchased products will appear here.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-hidden rounded-xl bg-white shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="min-w-full">
+                  <thead className="border-b bg-gray-100 border-gray-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Order ID
+                      </th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Product
+                      </th>
 
-              {/* Status */}
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Date
+                      </th>
 
-              <div className="mb-5 flex flex-wrap gap-3">
-                <span className="rounded bg-blue-100 px-3 py-1 text-sm text-blue-700">
-                  {order.orderStatus}
-                </span>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Total
+                      </th>
 
-                <span className="rounded bg-green-100 px-3 py-1 text-sm text-green-700">
-                  {order.paymentStatus}
-                </span>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Status
+                      </th>
 
-                <span className="rounded bg-gray-100 px-3 py-1 text-sm">
-                  {order.paymentMethod}
-                </span>
-              </div>
+                      <th className="px-6 py-4 text-left text-sm font-semibold">
+                        Payment
+                      </th>
 
-              {/* Products */}
+                      <th className="px-6 py-4 text-center text-sm font-semibold">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
 
-              <div className="space-y-4">
-                {order.orderItems.map((item, index) => (
-                  <div key={index} className="flex gap-4 border-b pb-4">
-                    <img
-                      src={item.image || "https://placehold.co/100"}
-                      alt={item.title}
-                      className="h-20 w-20 rounded border object-cover"
-                    />
+                  <tbody>
+                    {orders.map(
+                      (order) => (
+                        (
+                          <tr
+                            key={order._id}
+                            className="border-b transition hover:bg-gray-50 border-gray-200 "
+                          >
+                            <td className="px-6 py-5">
+                              <p className="max-w-[180px] truncate font-medium">
+                                #{order._id}
+                              </p>
+                            </td>
+                            <td className="px-6 py-5">
+                              <p className=" font-medium capitalize">
+                                {order.orderItems?.[0]?.title}
+                              </p>
+                            </td>
 
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{item.title}</h3>
+                            <td className="px-6 py-5">
+                              {new Date(order.createdAt).toLocaleDateString()}
+                            </td>
 
-                      <p className="text-sm text-gray-500">
-                        Qty : {item.quantity}
-                      </p>
+                            <td className="px-6 py-5 font-semibold">
+                              ₹{order.totalPrice.toLocaleString("en-IN")}
+                            </td>
 
-                      <p className="font-medium">₹{item.price}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                            <td className="px-6 py-5">
+                              <span
+                                className={`rounded-full px-3 py-1 text-xs font-medium
+                              ${
+                                order.orderStatus === "Delivered"
+                                  ? "bg-green-100 text-green-700"
+                                  : order.orderStatus === "Cancelled"
+                                    ? "bg-red-100 text-red-700"
+                                    : "bg-yellow-100 text-yellow-700"
+                              }`}
+                              >
+                                {order.orderStatus}
+                              </span>
+                            </td>
 
-              {/* Actions */}
+                            <td className="px-6 py-5">
+                              <span
+                                className={`rounded-full px-3 py-1 text-xs font-medium
+                              ${
+                                order.paymentStatus === "Paid"
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-red-100 text-red-700"
+                              }`}
+                              >
+                                {order.paymentStatus}
+                              </span>
+                            </td>
 
-              <div className="mt-5 flex justify-end">
-                {(order.orderStatus === "Pending" ||
-                  order.orderStatus === "Confirmed") && (
-                  <button
-                    onClick={() => handleCancel(order._id)}
-                    className="rounded bg-red-500 px-5 py-2 text-white hover:bg-red-600"
-                  >
-                    Cancel Order
-                  </button>
-                )}
+                            <td className="px-6 py-5">
+                              <div className="flex items-center justify-center gap-2">
+                                {/* View Details */}
+
+                                <button
+                                  onClick={() => setSelectedOrder(order)}
+                                  className="
+                                flex
+                                items-center
+                                gap-2
+                                rounded-xl
+                                bg-black
+                                px-4
+                                py-2
+                                text-sm
+                                font-medium
+                                text-white
+                                transition
+                                hover:bg-gray-800
+                              "
+                                >
+                                  <FiEye size={16} />
+                                  View
+                                </button>
+
+                                {/* Cancel */}
+
+                                {(order.orderStatus === "Pending" ||
+                                  order.orderStatus === "Confirmed") && (
+                                  <button
+                                    onClick={() => {
+                                      setOrderToCancel(order);
+                                      setCancelOrderOpen(true);
+                                    }}
+                                    className="
+      flex
+      items-center
+      gap-2
+      rounded-xl
+      bg-red-500
+      px-4
+      py-2
+      text-sm
+      font-medium
+      text-white
+      transition
+      hover:bg-red-600
+    "
+                                  >
+                                    <FiXCircle size={16} />
+                                    Cancel
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        )
+                      ),
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
-          ))}
+          )}
         </div>
-      )}
-    </section>
+      </section>
+
+      {/* Order Details Modal */}
+
+      <OrderDetailsModal
+        isOpen={!!selectedOrder}
+        order={selectedOrder}
+        onClose={() => setSelectedOrder(null)}
+        onCancel={(order) => {
+          setOrderToCancel(order);
+          setCancelOrderOpen(true);
+        }}
+      />
+
+      <CancelOrderModal
+        isOpen={cancelOrderOpen}
+        onClose={() => {
+          setCancelOrderOpen(false);
+          setOrderToCancel(null);
+        }}
+        loading={cancelLoading}
+        onConfirm={(reason) => {
+          handleCancel(orderToCancel._id, reason);
+        }}
+      />
+    </>
   );
 };
 

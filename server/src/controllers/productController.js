@@ -1,5 +1,6 @@
 import Product from "../models/Product.js";
-
+import Category from "../models/Category.js";
+import Brand from "../models/Brand.js";
 /* ==========================================================
    GET ALL PRODUCTS
 ========================================================== */
@@ -32,15 +33,31 @@ export const getAllProducts = async (req, res) => {
 
     /* ---------------- Category ---------------- */
 
-    if (category) {
-      query.category = category;
-    }
+  if (category) {
+    const categorySlugs = Array.isArray(category) ? category : [category];
+
+    const categories = await Category.find({
+      slug: { $in: categorySlugs },
+    }).select("_id");
+
+    query.category = {
+      $in: categories.map((item) => item._id),
+    };
+  }
 
     /* ---------------- Brand ---------------- */
 
-    if (brand) {
-      query.brand = brand;
-    }
+if (brand) {
+  const brandSlugs = Array.isArray(brand) ? brand : [brand];
+
+  const brands = await Brand.find({
+    slug: { $in: brandSlugs },
+  }).select("_id");
+
+  query.brand = {
+    $in: brands.map((item) => item._id),
+  };
+}
 
     /* ---------------- Price ---------------- */
 

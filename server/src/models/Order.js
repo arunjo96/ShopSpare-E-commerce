@@ -160,6 +160,13 @@ const orderSchema = new Schema(
 
     deliveredAt: Date,
 
+    cancelReason: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 250,
+    },
+
     cancelledAt: Date,
   },
   {

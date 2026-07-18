@@ -1,3 +1,5 @@
+
+
 import ProductCard from "../../components/ProductCard";
 import { useGetProductsQuery } from "../../services/product/productApi";
 
@@ -23,7 +25,7 @@ const Home = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto  px-4 py-8">
       {/* Hero */}
       <div className="mb-10 rounded-lg bg-slate-900 px-8 py-16 text-center text-white">
         <h1 className="mb-4 text-4xl font-bold">Welcome to ShopSphere</h1>
@@ -33,13 +35,15 @@ const Home = () => {
         </p>
       </div>
 
-      {/* Products */}
-      <h2 className="mb-6 text-2xl font-bold">Latest Products</h2>
+      {/* Latest Products */}
+      <div className="max-w-9/10 mx-auto">
+        <h2 className="mb-6 text-2xl font-bold">Latest Products</h2>
 
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {data?.products?.map((product) => (
-          <ProductCard key={product._id} product={product} />
-        ))}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {data?.products?.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
       </div>
     </div>
   );
