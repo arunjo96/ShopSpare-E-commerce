@@ -146,7 +146,7 @@ const Products = () => {
                     className="h-4 w-4 accent-black"
                   />
 
-                  <span>{category.name}</span>
+                  <span className="capitalize">{category.name}</span>
                 </label>
               ))}
             </div>
@@ -168,7 +168,7 @@ const Products = () => {
                     className="h-4 w-4 accent-black"
                   />
 
-                  <span>{brand.name}</span>
+                  <span className="capitalize">{brand.name}</span>
                 </label>
               ))}
             </div>
@@ -183,7 +183,7 @@ const Products = () => {
                   All Products
                 </h1>
 
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-500 capitalize">
                   {data?.products?.length || 0} Products Available
                 </p>
               </div>

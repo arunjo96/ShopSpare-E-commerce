@@ -327,6 +327,7 @@ const Categories = () => {
                       className="
                           text-xl
                           font-semibold
+                          capitalize
                           "
                     >
                       {category.name}
