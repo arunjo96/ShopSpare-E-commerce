@@ -23,6 +23,26 @@ export const createBrand = async (req, res) => {
       },
     });
 
+     if (existingBrand) {
+       // Restore deleted category
+       if (!existingBrand.isActive) {
+         existingBrand.isActive = true;
+
+         await existingBrand.save();
+
+         return res.status(200).json({
+           success: true,
+           message: "Category restored successfully",
+           category: existingBrand,
+         });
+       }
+
+       return res.status(409).json({
+         success: false,
+         message: "Category already exists",
+       });
+     }
+
     if (existingBrand) {
       return res.status(409).json({
         success: false,

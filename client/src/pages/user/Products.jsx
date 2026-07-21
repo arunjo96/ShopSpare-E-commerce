@@ -20,7 +20,7 @@ const Products = () => {
     brand: searchParams.getAll("brand"),
     sort: searchParams.get("sort") || "",
     page: Number(searchParams.get("page")) || 1,
-    limit: 10,
+    limit: Number(searchParams.get("limit")),
   };
 
   const { data: categoryData } = useGetCategoriesQuery();

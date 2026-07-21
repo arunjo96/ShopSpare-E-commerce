@@ -20,6 +20,8 @@ import cartRouter from "./src/routes/cartRoutes.js";
 import wishlistRouter from "./src/routes/wishlistRoutes.js";
 import orderRouter from "./src/routes/orderRoutes.js";
 import paymentRouter from "./src/routes/paymentRoutes.js";
+import carouselRouter from "./src/routes/carouselRoutes.js";
+
 
 const app = express();
 const server = http.createServer(app);
@@ -77,6 +79,8 @@ const startServer = async () => {
     app.use("/api/orders", orderRouter);
 
     app.use("/api/payment", paymentRouter);
+
+    app.use("/api/carousels", carouselRouter);
 
 
 

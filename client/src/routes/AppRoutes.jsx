@@ -23,12 +23,13 @@ import Orders from "../pages/user/Orders";
 
 /* Admin */
 import AdminRoute from "../components/AdminRoutes";
-// import Dashboard from "../pages/admin/Dashboard";
+import Dashboard from "../pages/admin/Dashboard";
 import AdminProducts from "../pages/admin/AdminProducts";
 import Categories from "../pages/admin/Categories";
 import Brands from "../pages/admin/Brands";
 import AdminOrders from "../pages/admin/AdminOrders";
 import ProtectedRoute from "../components/ProtectedRoute";
+import ScrollToTopBtn from "../components/ScrollTopBtn";
 
 const AppRoutes = () => {
   return (
@@ -90,7 +91,7 @@ const AppRoutes = () => {
         {/* ---------- Admin ---------- */}
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
-            {/* <Route index element={<Dashboard />} /> */}
+            <Route index element={<Dashboard />} />
             <Route path="products" element={<AdminProducts />} />
             <Route path="categories" element={<Categories />} />
             <Route path="brands" element={<Brands />} />
@@ -100,6 +101,7 @@ const AppRoutes = () => {
       </Routes>
 
       <LoginModal />
+      <ScrollToTopBtn />
     </>
   );
 };

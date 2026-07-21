@@ -6,6 +6,7 @@ const initialState = {
   user: null,
   accessToken: null,
   isAuthenticated: false,
+  isLoading: true,
 };
 
 const authSlice = createSlice({
@@ -22,6 +23,8 @@ const authSlice = createSlice({
       state.accessToken = accessToken;
 
       state.isAuthenticated = true;
+
+      state.isLoading = false;
     },
 
     logout: (state) => {
@@ -30,6 +33,8 @@ const authSlice = createSlice({
       state.accessToken = null;
 
       state.isAuthenticated = false;
+
+      state.isLoading = false;
     },
   },
 });

@@ -39,7 +39,7 @@ const ProfileDropdown = ({ user, profileOpen, onClose, onLogout }) => {
 
       {/* Profile */}
 
-      <NavLink
+      {/* <NavLink
         to="/profile"
         onClick={onClose}
         className={({ isActive }) =>
@@ -53,7 +53,7 @@ const ProfileDropdown = ({ user, profileOpen, onClose, onLogout }) => {
       >
         <FiUser size={18} />
         <span>Profile</span>
-      </NavLink>
+      </NavLink> */}
 
       {/* Orders */}
 

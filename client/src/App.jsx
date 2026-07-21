@@ -1,6 +1,6 @@
 
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { setCredentials, logout } from "./store/authSlice";
@@ -14,26 +14,36 @@ function App() {
 
   const [refreshToken] = useRefreshTokenMutation();
 
-  useEffect(() => {
-    const restoreSession = async () => {
-      try {
-        const response = await refreshToken().unwrap();
+const [isLoading, setIsLoading] = useState(true);
 
-        dispatch(
-          setCredentials({
-            user: response.user,
-            accessToken: response.accessToken,
-          }),
-        );
-      } catch (error) {
-        dispatch(logout());
-      }
-    };
+useEffect(() => {
+  const restoreSession = async () => {
+    try {
+      const response = await refreshToken().unwrap();
 
-    restoreSession();
-  }, []);
+      console.log(response);
 
-  return <AppRoutes />;
+      dispatch(
+        setCredentials({
+          user: response.user,
+          accessToken: response.accessToken,
+        })
+      );
+    } catch (error) {
+      dispatch(logout());
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  restoreSession();
+}, []);
+
+if (isLoading) {
+  return <div>Loading...</div>;
+}
+
+return <AppRoutes />;
 }
 
 export default App;

@@ -68,16 +68,18 @@ const baseApi = createApi({
 
   baseQuery: baseQueryWithReauth,
 
-  tagTypes: [
-    "Auth",
-    "Product",
-    "Category",
-    "Brand",
-    "Cart",
-    "Wishlist",
-    "Order",
-    "AdminOrder",
-  ],
+ tagTypes: [
+  "Auth",
+  "Product",
+  "Category",
+  "Brand",
+  "Cart",
+  "Wishlist",
+  "Order",
+  "AdminOrder",
+  "Carousel",
+  "AdminCarousel",
+],
 
   endpoints: () => ({}),
 });

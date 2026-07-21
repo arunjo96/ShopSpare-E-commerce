@@ -1,139 +1,4 @@
-// import { Outlet, NavLink } from "react-router-dom";
-// import {
-//   FiMenu,
-//   FiX,
-//   FiHome,
-//   FiBox,
-//   FiTag,
-//   FiShoppingBag,
-// } from "react-icons/fi";
-// import { useState } from "react";
 
-// const AdminLayout = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   const navClass = ({ isActive }) =>
-//     isActive
-//       ? "flex items-center gap-3 rounded bg-slate-800 px-4 py-2 text-white"
-//       : "flex items-center gap-3 rounded px-4 py-2 text-slate-300 hover:bg-slate-800 hover:text-white";
-
-//   return (
-//     <div className="flex min-h-screen bg-gray-100">
-//       {/* Mobile Overlay */}
-
-//       {isOpen && (
-//         <div
-//           className="fixed inset-0 z-30 bg-black/40 lg:hidden"
-//           onClick={() => setIsOpen(false)}
-//         />
-//       )}
-
-//       {/* Sidebar */}
-
-//       <aside
-//         className={`
-//           fixed
-//           left-0
-//           top-0
-//           z-40
-//           h-screen
-//           w-64
-//           bg-slate-900
-//           p-5
-//           transition-transform
-//           lg:static
-//           lg:translate-x-0
-
-//           ${isOpen ? "translate-x-0" : "-translate-x-full"}
-
-//         `}
-//       >
-//         <div className="mb-8 flex items-center justify-between">
-//           <h1 className="text-2xl font-bold text-white">ShopSphere</h1>
-
-//           <button
-//             className="text-white lg:hidden"
-//             onClick={() => setIsOpen(false)}
-//           >
-//             <FiX size={24} />
-//           </button>
-//         </div>
-
-//         <nav className="space-y-3">
-//           <NavLink
-//             to="/admin"
-//             end
-//             className={navClass}
-//             onClick={() => setIsOpen(false)}
-//           >
-//             <FiHome />
-//             Dashboard
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/products"
-//             className={navClass}
-//             onClick={() => setIsOpen(false)}
-//           >
-//             <FiBox />
-//             Products
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/categories"
-//             className={navClass}
-//             onClick={() => setIsOpen(false)}
-//           >
-//             <FiTag />
-//             Categories
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/brands"
-//             className={navClass}
-//             onClick={() => setIsOpen(false)}
-//           >
-//             <FiTag />
-//             Brands
-//           </NavLink>
-
-//           <NavLink
-//             to="/admin/orders"
-//             className={navClass}
-//             onClick={() => setIsOpen(false)}
-//           >
-//             <FiShoppingBag />
-//             Orders
-//           </NavLink>
-//         </nav>
-//       </aside>
-
-//       {/* Main Content */}
-
-//       <div className="flex flex-1 flex-col">
-//         {/* Header */}
-
-//         <header className="flex items-center justify-between bg-white px-5 py-4 shadow">
-//           <button className="lg:hidden" onClick={() => setIsOpen(true)}>
-//             <FiMenu size={24} />
-//           </button>
-
-//           <h2 className="text-xl font-semibold">Admin Panel</h2>
-
-//           <div className="text-sm text-gray-600">Admin</div>
-//         </header>
-
-//         {/* Page Content */}
-
-//         <main className="flex-1 p-5">
-//           <Outlet />
-//         </main>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminLayout;
 
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import {
@@ -179,7 +44,7 @@ const AdminLayout = () => {
       : "flex items-center gap-3 rounded-lg px-4 py-3 text-slate-300 transition hover:bg-slate-800 hover:text-white";
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex h-screen overflow-hidden bg-gray-100">
       {/* Mobile Overlay */}
       {isOpen && (
         <div
@@ -190,7 +55,7 @@ const AdminLayout = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-40 h-screen w-64 bg-slate-900 p-5 transition-transform duration-300 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 p-5 transition-transform duration-300 lg:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -257,9 +122,9 @@ const AdminLayout = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col lg:ml-64">
         {/* Header */}
-        <header className="flex items-center justify-between border-b bg-white px-5 py-4 shadow-sm">
+        <header className="sticky top-0 z-20 flex items-center justify-between border-gray-300 border-b bg-white px-5 py-4 shadow-sm">
           {/* Mobile Menu */}
           <button
             className="text-slate-700 lg:hidden"
@@ -269,9 +134,7 @@ const AdminLayout = () => {
           </button>
 
           {/* Title */}
-          <h2 className="text-xl font-semibold text-slate-800">
-            Admin Dashboard
-          </h2>
+          <h2 className="text-xl font-semibold text-slate-800">Admin Panel</h2>
 
           {/* Logout */}
           <button
@@ -284,7 +147,7 @@ const AdminLayout = () => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="min-w-0 flex-1 overflow-auto p-6 pt-0">
           <Outlet />
         </main>
       </div>

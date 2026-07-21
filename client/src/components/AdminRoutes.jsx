@@ -2,7 +2,16 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const AdminRoute = () => {
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, isLoading } = useSelector((state) => state.auth);
+
+  console.log("AdminRoute:", {
+    isAuthenticated,
+    user,
+  });
+
+  if (isLoading) {
+    return null;
+  }
 
   // Login pannala
   if (!isAuthenticated) {

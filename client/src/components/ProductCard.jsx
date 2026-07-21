@@ -35,7 +35,11 @@ const ProductCard = ({ product }) => {
 
   const isWishlisted = wishlistItems.some((item) => item.product?._id === _id);
 
-const handleAddToCart = async () => {
+  const handleAddToCart = async () => {
+  if(!user) {
+    dispatch(openLoginModal());
+    return
+  }
   try {
     const response = await addToCart({
       productId: product._id,
@@ -75,21 +79,25 @@ const handleAddToCart = async () => {
   return (
     <div
       className="
-        group
-        overflow-hidden
-        rounded-2xl
-        border
-        border-gray-200
-        bg-white
-        shadow-sm
-        transition
-        duration-300
-        hover:-translate-y-1
-        hover:shadow-lg
+     group
+    flex
+    h-full
+    flex-col
+    overflow-hidden
+    rounded-2xl
+    border
+    border-gray-200
+    bg-white
+    shadow-sm
+    transition
+    duration-300
+    hover:-translate-y-1
+    hover:shadow-lg
+
       "
     >
       {/* Image */}
-      <div className="relative overflow-hidden">
+      <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
         <Link to={`/products/${_id}`}>
           <img
             src={
@@ -99,13 +107,13 @@ const handleAddToCart = async () => {
             }
             alt={title}
             className="
-              h-60
-              w-full
-              object-cover
-              transition
-              duration-300
-              group-hover:scale-105
-            "
+    h-full
+    w-full
+    object-cover
+    transition
+    duration-500
+    group-hover:scale-105
+  "
           />
         </Link>
 
@@ -153,11 +161,12 @@ const handleAddToCart = async () => {
       </div>
 
       {/* Content */}
-      <div className="space-y-3 p-4">
+      <div className="flex flex-1 flex-col space-y-3 p-4">
         <Link to={`/products/${_id}`}>
           <h3
             className="
               line-clamp-2
+              min-h-[56px]
               text-lg
               font-semibold
               text-gray-900
@@ -185,7 +194,7 @@ const handleAddToCart = async () => {
         </div> */}
 
         {/* Price */}
-        <div className="flex items-center gap-3">
+        <div className="min-h-[32px] flex items-center gap-3">
           {discountPrice > 0 ? (
             <>
               <span className="text-xl font-bold">
@@ -210,7 +219,7 @@ const handleAddToCart = async () => {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-2">
+        <div className="mt-auto flex gap-2 pt-3">
           {/* View Product */}
           <Link
             to={`/products/${_id}`}

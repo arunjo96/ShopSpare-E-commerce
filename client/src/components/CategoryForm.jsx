@@ -54,7 +54,7 @@ const CategoryForm = ({ category, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-6">
+    <form onSubmit={handleSubmit} className="space-y-6 p-6 pt-0">
       <div>
         <label className="mb-2 block font-medium">Category Name</label>
 
@@ -63,15 +63,15 @@ const CategoryForm = ({ category, onClose }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter category name"
-          className="w-full rounded-lg border p-3 outline-none focus:border-slate-900"
+          className="w-full rounded-lg border p-3 outline-none focus:border-gray-400 border-gray-300"
         />
       </div>
 
-      <div className="flex justify-end gap-3 border-t pt-5">
+      <div className="flex justify-end gap-3 border-gray-400 border-t pt-5">
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg border px-6 py-3 hover:bg-gray-100"
+          className="rounded-lg border px-6 py-3 hover:bg-gray-100 border-gray-400"
         >
           Cancel
         </button>

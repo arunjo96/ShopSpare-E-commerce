@@ -21,6 +21,7 @@ export const createProduct = async (req, res) => {
       featured,
     } = req.body;
 
+
     /* ---------------- Validation ---------------- */
 
     if (!title || !description || !price || !stock || !category) {
@@ -62,14 +63,18 @@ export const createProduct = async (req, res) => {
       trim: true,
     });
 
-    const productExists = await Product.findOne({ slug });
+   console.log("Generated slug:", slug);
 
-    if (productExists) {
-      return res.status(409).json({
-        success: false,
-        message: "Product already exists",
-      });
-    }
+   const productExists = await Product.findOne({ slug });
+
+   console.log("Existing Product:", productExists);
+
+   if (productExists) {
+     return res.status(409).json({
+       success: false,
+       message: "Product already exists",
+     });
+   }
 
     /* ---------------- Images ---------------- */
 
@@ -77,7 +82,7 @@ export const createProduct = async (req, res) => {
 
     if (req.files?.length) {
       for (const file of req.files) {
-        const result = await imageUploadUtil(file);
+        const result = await imageUploadUtil(file.buffer);
 
         images.push({
           public_id: result.public_id,
@@ -113,13 +118,10 @@ export const createProduct = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal server error",
+      error: error.message,
     });
   }
 };
-
-
-
-
 
 /* ==========================================================
    UPDATE PRODUCT
@@ -131,14 +133,12 @@ export const updateProduct = async (req, res) => {
 
     const product = await Product.findById(id);
 
-
     if (!product) {
       return res.status(404).json({
         success: false,
         message: "Product not found",
       });
     }
-
 
     const {
       title,
@@ -150,8 +150,8 @@ export const updateProduct = async (req, res) => {
       brand,
       featured,
       isActive,
+      imageOrder,
     } = req.body;
-
 
     /* ---------------- Category Validation ---------------- */
 
@@ -166,7 +166,6 @@ export const updateProduct = async (req, res) => {
       }
     }
 
-
     /* ---------------- Brand Validation ---------------- */
 
     if (brand) {
@@ -180,79 +179,92 @@ export const updateProduct = async (req, res) => {
       }
     }
 
+    /* ---------------- Images ---------------- */
 
-    /* ---------------- Update Images ---------------- */
+    let images = [];
 
-    let images = product.images;
+    const order = imageOrder ? JSON.parse(imageOrder) : [];
 
+    // Upload new images
+    const uploadedImages = [];
 
-    if (req.files && req.files.length > 0) {
-
-      const newImages = [];
-
+    if (req.files?.length) {
       for (const file of req.files) {
+        const result = await imageUploadUtil(file.buffer);
 
-        const result = await imageUploadUtil(
-          file,
-          "shopsphere/products"
-        );
-
-
-        newImages.push({
+        uploadedImages.push({
           public_id: result.public_id,
           url: result.secure_url,
         });
       }
-
-
-      images = [
-        ...images,
-        ...newImages,
-      ];
     }
 
+    // Existing images map
+    const oldImagesMap = {};
+
+    product.images.forEach((img) => {
+      oldImagesMap[img.public_id] = img;
+    });
+
+    // Build final image array
+    let uploadedIndex = 0;
+
+    for (const item of order) {
+      if (item.type === "old") {
+        if (oldImagesMap[item.public_id]) {
+          images.push(oldImagesMap[item.public_id]);
+        }
+      } else {
+        if (uploadedImages[uploadedIndex]) {
+          images.push(uploadedImages[uploadedIndex]);
+          uploadedIndex++;
+        }
+      }
+    }
 
     /* ---------------- Update Product ---------------- */
 
+ const oldSlugData = `${product.title}-${product.brand}-${product.category}`;
 
-      
-      product.title = title ?? product.title;
-      product.description = description ?? product.description;
-      product.price = price ?? product.price;
-      product.discountPrice = discountPrice ?? product.discountPrice;
-      product.category = category ?? product.category;
-      product.stock = stock ?? product.stock;
-   product.brand = brand ?? product.brand;
-   product.featured = featured ?? product.featured;
-   product.isActive = isActive ?? product.isActive;
+ product.title = title ?? product.title;
+ product.description = description ?? product.description;
+ product.price = price ?? product.price;
+ product.discountPrice = discountPrice ?? product.discountPrice;
+ product.stock = stock ?? product.stock;
+ product.category = category ?? product.category;
+ product.brand = brand ?? product.brand;
+ product.featured = featured ?? product.featured;
+ product.isActive = isActive ?? product.isActive;
 
-    product.images = images;
+ const newSlugData = `${product.title}-${product.brand}-${product.category}`;
 
+ if (oldSlugData !== newSlugData) {
+   product.slug = slugify(newSlugData, {
+     lower: true,
+     strict: true,
+   });
+ }
+
+ product.images = images;
 
     await product.save();
-
 
     return res.status(200).json({
       success: true,
       message: "Product updated successfully",
       product,
     });
-
-
   } catch (error) {
-
-    console.error(
-      "Update Product Error:",
-      error
-    );
-
+    console.error("Update Product Error:", error);
 
     return res.status(500).json({
       success: false,
       message: "Internal server error",
+      error: error.message,
     });
   }
 };
+
 
 
 /* ==========================================================
@@ -277,6 +289,7 @@ export const getAdminProducts = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal server error",
+      error: error.message,
     });
   }
 };
@@ -333,6 +346,7 @@ export const deleteProduct = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal server error",
+      error: error.message,
     });
   }
 };

@@ -28,6 +28,26 @@ export const createCategory = async (req, res) => {
     });
 
     if (existingCategory) {
+      // Restore deleted category
+      if (!existingCategory.isActive) {
+        existingCategory.isActive = true;
+
+        await existingCategory.save();
+
+        return res.status(200).json({
+          success: true,
+          message: "Category restored successfully",
+          category: existingCategory,
+        });
+      }
+
+      return res.status(409).json({
+        success: false,
+        message: "Category already exists",
+      });
+    }
+
+    if (existingCategory) {
       return res.status(409).json({
         success: false,
         message: "Category already exists",

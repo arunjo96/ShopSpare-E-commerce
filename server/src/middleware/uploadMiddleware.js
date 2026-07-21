@@ -11,14 +11,13 @@ const upload = multer({
   },
 
   fileFilter: (req, file, cb) => {
-    const allowed = ["image/jpeg", "image/png", "image/webp"];
+    const allowed = ["image/jpeg", "image/png", "image/webp", "image/svg+xml", "image/gif", " image/jpg", "image/avif"];
 
     if (allowed.includes(file.mimetype)) {
       cb(null, true);
     } else {
       cb(new Error("Only images allowed"));
     }
-    
   },
 });
 

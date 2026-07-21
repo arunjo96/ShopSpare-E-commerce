@@ -21,3 +21,29 @@ button{
 ::-webkit-scrollbar-thumb:hover {
     background: #888;
 }
+
+/* ----swiper--carousel----- */
+
+/* Hide default Swiper arrows */
+
+.swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
+}
+
+/* Pagination */
+
+.swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  width: 28px;
+  border-radius: 9999px;
+  opacity: 1;
+  background: #ffffff;
+}
