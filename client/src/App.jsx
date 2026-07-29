@@ -8,6 +8,7 @@ import { useRefreshTokenMutation } from "./services/auth/authApi";
 
 import AppRoutes from "./routes/AppRoutes";
 import "./App.css";
+import Loading from "./components/Loading";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const [loading, setLoading] = useState(true);
   },[]);
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <Loading />
     }
 
   return <AppRoutes />;

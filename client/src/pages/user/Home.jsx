@@ -5,6 +5,7 @@ import ProductCard from "../../components/ProductCard";
 import { homeCategories, homeBrands } from "../../constants";
 
 import { useGetProductsQuery } from "../../services/product/productApi";
+import Loading from "../../components/Loading";
 
 const Home = () => {
   const { data, isLoading, isError } = useGetProductsQuery();
@@ -12,11 +13,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   if (isLoading) {
-    return (
-      <div className="flex h-[70vh] items-center justify-center">
-        <h2 className="text-xl font-semibold">Loading...</h2>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
