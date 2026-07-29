@@ -1,29 +1,36 @@
 
-
 import { test, expect } from "@playwright/test";
+test("User should buy product and reach payment", async ({ page }) => {
+  await page.goto("http://localhost:5173/products");
 
-test("User should logout successfully", async ({ page }) => {
-  await page.goto("/");
+  await page.getByTestId("view-product").first().click();
 
-  // Wait for auth restore
-  await page.waitForLoadState("networkidle");
+  await expect(page).toHaveURL(/products\/.+/);
 
-  const profileBtn = page.getByTestId("profile-menu-button");
+  await page
+    .getByRole("button", {
+      name: /buy now/i,
+    })
+    .click();
 
-  await expect(profileBtn).toBeVisible({
-    timeout: 15000,
-  });
+  await expect(page).toHaveURL(/checkout/);
 
-  await profileBtn.click();
+  await page.fill('input[name="fullName"]', "Playwright User");
+  await page.fill('input[name="phone"]', "9876543210");
+  await page.fill('textarea[name="address"]', "123 Test Street");
+  await page.fill('input[name="city"]', "Chennai");
+  await page.fill('input[name="state"]', "Tamil Nadu");
+  await page.fill('input[name="postalCode"]', "600001");
 
-  const logoutBtn = page.getByRole("button", {
-    name: "Logout",
+await page
+  .getByRole("button", {
+    name: "Continue",
     exact: true,
-  });
-
-  await expect(logoutBtn).toBeVisible();
-
-  await logoutBtn.click();
-
-  await expect(page).toHaveURL(/login|register|\/$/);
+  })
+  .click();
+  await expect(
+    page.getByRole("button", {
+      name: /pay/i,
+    }),
+  ).toBeVisible();
 });
