@@ -58,11 +58,11 @@ setup("authenticate", async ({ page }) => {
 
   await page.getByPlaceholder("Enter password").fill("password");
 await page.getByTestId("login-button").click();
-  await page
-    .getByRole("button", {
-      name: /login/i,
-    })
-    .click();
+  // await page
+  //   .getByRole("button", {
+  //     name: /login/i,
+  //   })
+  //   .click();
 
   await expect(page).not.toHaveURL(/login/);
 
