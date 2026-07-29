@@ -201,7 +201,10 @@ const ProductDetails = () => {
         <div className="space-y-6">
           {/* Title */}
           <div>
-            <h1 className="text-4xl capitalize font-bold text-gray-900">
+            <h1
+              data-testid="product-title"
+              className="text-4xl capitalize font-bold text-gray-900"
+            >
               {product.title}
             </h1>
 
@@ -296,6 +299,7 @@ const ProductDetails = () => {
           {/* Action Buttons */}
           <div className="flex gap-3">
             <button
+              data-testid="product-details-add-cart"
               onClick={handleAddToCart}
               disabled={product.stock === 0}
               className="
@@ -320,6 +324,7 @@ const ProductDetails = () => {
             </button>
 
             <button
+              data-testid="product-details-buy-now"
               onClick={handleBuyNow}
               disabled={product.stock === 0}
               className="

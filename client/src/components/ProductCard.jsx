@@ -78,6 +78,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
+      data-testid="product-card"
       className="
      group
     flex
@@ -222,6 +223,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-auto flex gap-2 pt-3">
           {/* View Product */}
           <Link
+            data-testid="view-product"
             to={`/products/${_id}`}
             className="
               flex-1

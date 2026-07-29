@@ -311,6 +311,7 @@ mt-1
 
           <button
             disabled={isLoading}
+            type="submit"
             className="
 w-full
 bg-black

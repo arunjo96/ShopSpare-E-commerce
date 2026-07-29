@@ -40,29 +40,30 @@ const HeaderDesktop = ({
         </Link>
       ))}
 
-          {/* Right Actions */}
-          
-          <div className="flex items-center gap-4 ">
+      {/* Right Actions */}
 
-      <NavLink
-        to="/wishlist"
-        onClick={handleWishlistClick}
-        className="rounded-full p-2 transition-all duration-200 hover:bg-gray-100"
-      >
-        <FiHeart size={21} />
-      </NavLink>
+      <div className="flex items-center gap-4 ">
+        <NavLink
+          to="/wishlist"
+          onClick={handleWishlistClick}
+          className="rounded-full p-2 transition-all duration-200 hover:bg-gray-100"
+        >
+          <FiHeart size={21} />
+        </NavLink>
 
-      {/* Cart */}
+        {/* Cart */}
 
-      <CartButton cartCount={cartCount} onClick={handleCartClick} />
+        <CartButton cartCount={cartCount} onClick={handleCartClick} />
 
-      {/* Profile */}
+        {/* Profile */}
 
-      {isAuthenticated ? (
-        <div className="relative">
-          <button
-            onClick={() => setProfileOpen((prev) => !prev)}
-            className="
+        {isAuthenticated ? (
+          <div className="relative">
+            <button
+              data-testid="profile-menu-button"
+              aria-label="Open profile menu"
+              onClick={() => setProfileOpen((prev) => !prev)}
+              className="
               flex
               items-center
               gap-3
@@ -74,11 +75,11 @@ const HeaderDesktop = ({
               hover:bg-gray-100
               active:scale-95
             "
-          >
-            {/* Avatar */}
+            >
+              {/* Avatar */}
 
-            <div
-              className="
+              <div
+                className="
                 flex
                 h-10
                 w-10
@@ -90,47 +91,46 @@ const HeaderDesktop = ({
                 font-bold
                 text-white
               "
-            >
-              {user?.name?.charAt(0)?.toUpperCase()}
-            </div>
+              >
+                {user?.name?.charAt(0)?.toUpperCase()}
+              </div>
 
-            {/* User */}
+              {/* User */}
 
-            <div className="flex flex-col text-left">
-              <span className="max-w-[120px] truncate text-sm font-semibold">
-                {user?.name}
-              </span>
+              <div className="flex flex-col text-left">
+                <span className="max-w-[120px] truncate text-sm font-semibold">
+                  {user?.name}
+                </span>
 
-              <span className="max-w-[120px] truncate text-xs text-gray-500">
-                {user?.email}
-              </span>
-            </div>
+                <span className="max-w-[120px] truncate text-xs text-gray-500">
+                  {user?.email}
+                </span>
+              </div>
 
-            <FiChevronDown
-              size={17}
-              className={`transition-transform duration-200 ${
-                profileOpen ? "rotate-180" : ""
-              }`}
+              <FiChevronDown
+                size={17}
+                className={`transition-transform duration-200 ${
+                  profileOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            <ProfileDropdown
+              user={user}
+              profileOpen={profileOpen}
+              onClose={() => setProfileOpen(false)}
+              onLogout={handleLogout}
             />
-          </button>
-
-          <ProfileDropdown
-            user={user}
-            profileOpen={profileOpen}
-            onClose={() => setProfileOpen(false)}
-            onLogout={handleLogout}
-          />
-        </div>
-      ) : (
-        <NavLink
-          to="/login"
-          className="rounded-full p-2 transition-all duration-200 hover:bg-gray-100"
-        >
-          <FiUser size={22} />
-        </NavLink>
-      )}
+          </div>
+        ) : (
+          <NavLink
+            to="/login"
+            className="rounded-full p-2 transition-all duration-200 hover:bg-gray-100"
+          >
+            <FiUser size={22} />
+          </NavLink>
+        )}
       </div>
-
     </div>
   );
 };

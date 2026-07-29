@@ -1,6 +1,6 @@
 
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { setCredentials, logout } from "./store/authSlice";
@@ -12,7 +12,7 @@ import "./App.css";
 function App() {
   const dispatch = useDispatch();
   const [refreshToken] = useRefreshTokenMutation();
-
+const [loading, setLoading] = useState(true);
   useEffect(() => {
     const restoreSession = async () => {
       try {
@@ -26,11 +26,17 @@ function App() {
         );
       } catch {
         dispatch(logout());
+      } finally {
+        setLoading(false);
       }
     };
 
     restoreSession();
-  }, [dispatch, refreshToken]);
+  },[]);
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
 
   return <AppRoutes />;
 }

@@ -96,6 +96,8 @@ const ProfileDropdown = ({ user, profileOpen, onClose, onLogout }) => {
       {/* Logout */}
 
       <button
+        aria-label="Logout"
+        data-testid="logout-button"
         onClick={onLogout}
         className="
           flex

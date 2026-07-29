@@ -20,21 +20,56 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithReauth = async (args, api, extraOptions) => {
-  let result = await baseQuery(args, api, extraOptions);
+// const baseQueryWithReauth = async (args, api, extraOptions) => {
+//   let result = await baseQuery(args, api, extraOptions);
 
   
+//   if (
+//     result.error?.status === 401 &&
+//     !args.url?.includes("/auth/refresh-token")
+//   ) {
+//     const accessToken = api.getState().auth.accessToken;
+
+//     // User login pannala na refresh panna vendam
+//     if (!accessToken) {
+//       return result;
+//     }
+
+//     const refreshResult = await baseQuery(
+//       {
+//         url: "/auth/refresh-token",
+//         method: "POST",
+//       },
+//       api,
+//       extraOptions,
+//     );
+
+//     if (refreshResult.data) {
+//       api.dispatch(
+//         setCredentials({
+//           user: refreshResult.data.user,
+//           accessToken: refreshResult.data.accessToken,
+//         }),
+//       );
+
+//       // Original request retry
+//       result = await baseQuery(args, api, extraOptions);
+//     } else {
+//       // Refresh fail aana logout
+//       api.dispatch(logout());
+//     }
+//   }
+
+//   return result;
+// };
+
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+const url = typeof args === "string" ? args : args.url;
   if (
     result.error?.status === 401 &&
-    !args.url?.includes("/auth/refresh-token")
+    !url?.includes("/auth/refresh-token")
   ) {
-    const accessToken = api.getState().auth.accessToken;
-
-    // User login pannala na refresh panna vendam
-    if (!accessToken) {
-      return result;
-    }
-
     const refreshResult = await baseQuery(
       {
         url: "/auth/refresh-token",
@@ -52,16 +87,16 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         }),
       );
 
-      // Original request retry
+      // Retry original request
       result = await baseQuery(args, api, extraOptions);
     } else {
-      // Refresh fail aana logout
       api.dispatch(logout());
     }
   }
 
   return result;
 };
+
 
 const baseApi = createApi({
   reducerPath: "api",

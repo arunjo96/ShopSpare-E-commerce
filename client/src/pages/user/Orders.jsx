@@ -85,7 +85,9 @@ const handleCancel = async (orderId, reason) => {
             </div>
 
             <div>
-              <h1 className="text-3xl font-bold">My Orders</h1>
+              <h1 data-testid="orders-title" className="text-3xl font-bold">
+                My Orders
+              </h1>
 
               <p className="text-gray-500">
                 {orders.length} Order{orders.length !== 1 && "s"}
@@ -141,35 +143,34 @@ const handleCancel = async (orderId, reason) => {
                   </thead>
 
                   <tbody>
-                    {orders.map(
-                      (order) => (
-                        (
-                          <tr
-                            key={order._id}
-                            className="border-b transition hover:bg-gray-50 border-gray-200 "
-                          >
-                            <td className="px-6 py-5">
-                              <p className="max-w-[180px] truncate font-medium">
-                                #{order._id}
-                              </p>
-                            </td>
-                            <td className="px-6 py-5">
-                              <p className=" font-medium capitalize">
-                                {order.orderItems?.[0]?.title}
-                              </p>
-                            </td>
+                    {orders.map((order) => (
+                      <tr
+                        key={order._id}
+                        data-testid="order-row"
+                        className="border-b transition hover:bg-gray-50 border-gray-200 "
+                      >
+                        <td className="px-6 py-5">
+                          <p className="max-w-[180px] truncate font-medium">
+                            #{order._id}
+                          </p>
+                        </td>
+                        <td className="px-6 py-5">
+                          <p className=" font-medium capitalize">
+                            {order.orderItems?.[0]?.title}
+                          </p>
+                        </td>
 
-                            <td className="px-6 py-5">
-                              {new Date(order.createdAt).toLocaleDateString()}
-                            </td>
+                        <td className="px-6 py-5">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </td>
 
-                            <td className="px-6 py-5 font-semibold">
-                              ₹{order.totalPrice.toLocaleString("en-IN")}
-                            </td>
+                        <td className="px-6 py-5 font-semibold">
+                          ₹{order.totalPrice.toLocaleString("en-IN")}
+                        </td>
 
-                            <td className="px-6 py-5">
-                              <span
-                                className={`rounded-full px-3 py-1 text-xs font-medium
+                        <td className="px-6 py-5">
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-medium
                               ${
                                 order.orderStatus === "Delivered"
                                   ? "bg-green-100 text-green-700"
@@ -177,31 +178,32 @@ const handleCancel = async (orderId, reason) => {
                                     ? "bg-red-100 text-red-700"
                                     : "bg-yellow-100 text-yellow-700"
                               }`}
-                              >
-                                {order.orderStatus}
-                              </span>
-                            </td>
+                          >
+                            {order.orderStatus}
+                          </span>
+                        </td>
 
-                            <td className="px-6 py-5">
-                              <span
-                                className={`rounded-full px-3 py-1 text-xs font-medium
+                        <td className="px-6 py-5">
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-medium
                               ${
                                 order.paymentStatus === "Paid"
                                   ? "bg-green-100 text-green-700"
                                   : "bg-red-100 text-red-700"
                               }`}
-                              >
-                                {order.paymentStatus}
-                              </span>
-                            </td>
+                          >
+                            {order.paymentStatus}
+                          </span>
+                        </td>
 
-                            <td className="px-6 py-5">
-                              <div className="flex items-center justify-center gap-2">
-                                {/* View Details */}
+                        <td className="px-6 py-5">
+                          <div className="flex items-center justify-center gap-2">
+                            {/* View Details */}
 
-                                <button
-                                  onClick={() => setSelectedOrder(order)}
-                                  className="
+                            <button
+                              data-testid="view-order"
+                              onClick={() => setSelectedOrder(order)}
+                              className="
                                 flex
                                 items-center
                                 gap-2
@@ -215,21 +217,22 @@ const handleCancel = async (orderId, reason) => {
                                 transition
                                 hover:bg-gray-800
                               "
-                                >
-                                  <FiEye size={16} />
-                                  View
-                                </button>
+                            >
+                              <FiEye size={16} />
+                              View
+                            </button>
 
-                                {/* Cancel */}
+                            {/* Cancel */}
 
-                                {(order.orderStatus === "Pending" ||
-                                  order.orderStatus === "Confirmed") && (
-                                  <button
-                                    onClick={() => {
-                                      setOrderToCancel(order);
-                                      setCancelOrderOpen(true);
-                                    }}
-                                    className="
+                            {(order.orderStatus === "Pending" ||
+                              order.orderStatus === "Confirmed") && (
+                              <button
+                                data-testid="cancel-order"
+                                onClick={() => {
+                                  setOrderToCancel(order);
+                                  setCancelOrderOpen(true);
+                                }}
+                                className="
       flex
       items-center
       gap-2
@@ -243,17 +246,15 @@ const handleCancel = async (orderId, reason) => {
       transition
       hover:bg-red-600
     "
-                                  >
-                                    <FiXCircle size={16} />
-                                    Cancel
-                                  </button>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
-                        )
-                      ),
-                    )}
+                              >
+                                <FiXCircle size={16} />
+                                Cancel
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

@@ -127,6 +127,7 @@ const Wishlist = () => {
 
               return (
                 <div
+                  data-testid="product-card"
                   key={product._id}
                   className="
                   group
@@ -212,6 +213,7 @@ const Wishlist = () => {
                     <div className="mt-5 space-y-3">
                       {/* Add to Cart */}
                       <button
+                        data-testid="wishlist-add-to-cart"
                         onClick={() => handleAddToCart(product._id)}
                         className="
       flex
@@ -235,6 +237,7 @@ const Wishlist = () => {
 
                       {/* View */}
                       <Link
+                        data-testid="wishlist-view-product"
                         to={`/products/${product._id}`}
                         className="
       flex

@@ -5,15 +5,27 @@ import { Navigate } from "react-router-dom";
 import { openLoginModal } from "../store/uiSlice";
 
 const ProtectedRoute = ({ children }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (!user) {
-      dispatch(openLoginModal());
-    }
-  }, [user, dispatch]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     dispatch(openLoginModal());
+  //   }
+  // }, [user, dispatch]);
+
+  // if (!user) {
+  //   return <Navigate to="/" replace />;
+  // }
+
+  // return children;
+
+  const { user, isLoading } = useSelector((state) => state.auth);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   if (!user) {
     return <Navigate to="/" replace />;
