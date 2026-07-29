@@ -51,23 +51,46 @@ import { test as setup, expect } from "@playwright/test";
 //   });
 // });
 
+// setup("authenticate", async ({ page }) => {
+//   await page.goto("/login");
+
+//   await page.getByPlaceholder("example@gmail.com").fill("arunjo9601@gmail.com");
+
+//   await page.getByPlaceholder("Enter password").fill("password");
+
+//   await page
+//     .getByRole("button", {
+//       name: /login/i,
+//     })
+//     .click();
+
+//   await expect(page).not.toHaveURL(/login/);
+
+//   await expect(page.getByTestId("profile-menu-button")).toBeVisible({
+//     timeout: 15000,
+//   });
+
+//   await page.context().storageState({
+//     path: "playwright/.auth/user.json",
+//   });
+// });
+
 setup("authenticate", async ({ page }) => {
   await page.goto("/login");
 
-  await page.getByPlaceholder("example@gmail.com").fill("arunjo9601@gmail.com");
+  await page.getByTestId("email-input").fill("arunjo9601@gmail.com");
 
-  await page.getByPlaceholder("Enter password").fill("password");
+  await page.getByTestId("password-input").fill("password");
 
-  await page
-    .getByRole("button", {
-      name: /login/i,
-    })
-    .click();
+  await page.getByTestId("login-button").click();
 
-  await expect(page).not.toHaveURL(/login/);
-
-  await expect(page.getByTestId("profile-menu-button")).toBeVisible({
-    timeout: 15000,
+  // Wait for login success
+  await expect(
+    page.getByRole("button", {
+      name: "Open profile menu",
+    }),
+  ).toBeVisible({
+    timeout: 30000,
   });
 
   await page.context().storageState({
