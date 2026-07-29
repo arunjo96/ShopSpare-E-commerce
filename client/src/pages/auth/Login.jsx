@@ -35,6 +35,8 @@ const Login = () => {
         }),
       );
 
+       console.log("LOGIN SUCCESS:", response);
+
       toast.success(response.message);
 
       if (response.user.role === "admin") {
